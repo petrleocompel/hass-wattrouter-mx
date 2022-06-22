@@ -1,0 +1,11 @@
+{
+  "domain": "wattrouter_mx",
+  "name": "Wattrouter MX",
+  "documentation": "https://github.com/petrleocompel/hass-wattrouter-mx",
+  "dependencies": [],
+  "config_flow": true,
+  "codeowners": ["petrleocompel"],
+  "requirements": ["xmltodict", "dicttoxml"],
+  "iot_class": "local_polling",
+  "version": "1.0.0"
+}

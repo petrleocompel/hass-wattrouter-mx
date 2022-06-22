@@ -1,0 +1,15 @@
+{
+  "config": {
+    "error": {
+    },
+    "step": {
+      "user": {
+        "data": {
+          "address": "Wattrouter address - http://192.168.1.5",
+          "username": "Username",
+          "password": "Password"
+        }
+      }
+    }
+  }
+}
