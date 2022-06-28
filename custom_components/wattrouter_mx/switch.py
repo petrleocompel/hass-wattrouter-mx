@@ -107,7 +107,7 @@ class WattrouterSwitch(SwitchEntity):
     @property
     def is_on(self):
         """Return is_on status."""
-        return self._state
+        return self._state == STATE_ON
 
     @property
     def name(self):
@@ -138,10 +138,13 @@ class WattrouterSwitch(SwitchEntity):
             text_config = await resp.text()
             config = xmltodict.parse(text_config)
             config["conf"][self._eeid]["M"] = config["conf"][self._eeid]["M"][:-1] + WR_ENABLE_BIT
+            config["conf"]["UN"] = self._api.username
+            config["conf"]["UP"] = self._api.password
 
             sig = generate_signature(text_config, self._api.username, self._api.password)
             new_config = dicttoxml.dicttoxml(config, attr_type=False, root=False).decode("utf-8")
-            data = "\n" + "\n" + new_config + "<sig>" + sig + "</sig>"
+            data = "\n" + "\n" + new_config
+            #+ "<sig>" + sig + "</sig>"
             _LOGGER.debug("MX request: %s", data)
             res = await self._api.set_config(data)
             _LOGGER.debug("MX response: %s", res)
@@ -166,17 +169,20 @@ class WattrouterSwitch(SwitchEntity):
                 _LOGGER.error("%s returned %s", resp.url, resp.status)
                 return
 
-            self._available = True
-            config = xmltodict.parse(await resp.text())
 
+            config = xmltodict.parse(await resp.text())
+            mvalue = config["conf"][self._eeid]["M"]
             current = config["conf"][self._eeid]["M"][-1]
-            if current is WR_ENABLE_BIT:
+            _LOGGER.info("Current status: %s, m value: %s, resOff: %s, resOn: %s", current, mvalue, current == WR_DISABLE_BIT, current == WR_ENABLE_BIT)
+            if current == WR_ENABLE_BIT:
                 self._state = STATE_ON
-            elif current is WR_DISABLE_BIT:
+            elif current == WR_DISABLE_BIT:
                 self._state = STATE_OFF
             else:
                 self._state = STATE_UNKNOWN
-            self.schedule_update_ha_state()
+            #self.schedule_update_ha_state()
+            #self.async_write_ha_state()
+            self._available = True
         except Exception:
             self._available = False
             _LOGGER.exception(
@@ -199,10 +205,14 @@ class WattrouterSwitch(SwitchEntity):
             text_config = await resp.text()
             config = xmltodict.parse(text_config)
             config["conf"][self._eeid]["M"] = config["conf"][self._eeid]["M"][:-1] + WR_DISABLE_BIT
+            config["conf"]["UN"] = self._api.username
+            config["conf"]["UP"] = self._api.password
 
             sig = generate_signature(text_config, self._api.username, self._api.password)
             new_config = dicttoxml.dicttoxml(config, attr_type=False, root=False).decode("utf-8")
-            data = "\n" + "\n" + new_config + "<sig>" + sig + "</sig>"
+
+            data = "\n" + "\n" + new_config
+            # + "<sig>" + sig + "</sig>"
 
             _LOGGER.debug("MX request: %s", data)
             res = await self._api.set_config(data)
