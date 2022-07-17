@@ -13,6 +13,7 @@ async def async_setup_entry(
 ) -> bool:
     """Set up platform from a ConfigEntry."""
     hass.data.setdefault(DOMAIN, {})
+    hass.data[DOMAIN].setdefault('entities', {})
     hass_data = dict(entry.data)
     # Registers update listener to update config entry when options are updated.
     #unsub_options_update_listener = entry.add_update_listener(options_update_listener)
@@ -43,7 +44,9 @@ async def async_unload_entry(
 
     return unload_ok
 
+
 async def async_setup(hass: core.HomeAssistant, config: dict) -> bool:
     """Set up the GitHub Custom component from yaml configuration."""
     hass.data.setdefault(DOMAIN, {})
+    hass.data[DOMAIN].setdefault('entities', {})
     return True

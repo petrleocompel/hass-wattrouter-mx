@@ -62,6 +62,11 @@ class GroupedWattrouterSwitch(CoordinatorEntity, SwitchEntity, BaseWattrouterSwi
         self._name = name
         self._state = None
         self._available = False
+        self._unique_id = "wattrouter-" + ('|'.join(eeids))
+
+    @property
+    def unique_id(self):
+        return self._unique_id
 
     @property
     def is_on(self):

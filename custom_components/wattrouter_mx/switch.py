@@ -60,25 +60,27 @@ async def async_setup_entry(
         config_entry: config_entries.ConfigEntry,
         async_add_entities,
 ):
-    """Setup sensors from a config entry created in the integrations UI."""
+    """Setup entities from a config entry created in the integrations UI."""
     config = hass.data[DOMAIN][config_entry.entry_id]
     if config_entry.options:
         config.update(config_entry.options)
     session = async_get_clientsession(hass)
-    sensors = []
+    entities = []
     if config[CONF_ADDRESS] is not None and config[CONF_USERNAME] is not None and config[CONF_PASSWORD] is not None:
         api = WattrouterApi(session, config[CONF_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD])
         coordinator = WattrouterCoordinator(hass, api)
         await coordinator.async_config_entry_first_refresh()
-        sensors.append(WattrouterSwitch(coordinator, "TS11", "TS11"))
-        sensors.append(WattrouterSwitch(coordinator, "TS21", "TS21"))
-        sensors.append(WattrouterSwitch(coordinator, "TS31", "TS31"))
-        sensors.append(GroupedWattrouterSwitch(coordinator, ["TS11", "TS21", "TS31"], "TS-1-3"))
-        sensors.append(WattrouterSwitch(coordinator, "TS41", "TS41"))
-        sensors.append(WattrouterSwitch(coordinator, "TS51", "TS51"))
-        sensors.append(WattrouterSwitch(coordinator, "TS61", "TS61"))
-        sensors.append(GroupedWattrouterSwitch(coordinator, ["TS41", "TS51", "TS61"], "TS-4-6"))
-    async_add_entities(sensors, update_before_add=True)
+        entities.append(WattrouterSwitch(coordinator, "TS11", "TS11"))
+        entities.append(WattrouterSwitch(coordinator, "TS21", "TS21"))
+        entities.append(WattrouterSwitch(coordinator, "TS31", "TS31"))
+        entities.append(GroupedWattrouterSwitch(coordinator, ["TS11", "TS21", "TS31"], "TS-1-3"))
+        entities.append(WattrouterSwitch(coordinator, "TS41", "TS41"))
+        entities.append(WattrouterSwitch(coordinator, "TS51", "TS51"))
+        entities.append(WattrouterSwitch(coordinator, "TS61", "TS61"))
+        entities.append(GroupedWattrouterSwitch(coordinator, ["TS41", "TS51", "TS61"], "TS-4-6"))
+    for entity in entities:
+        hass.data[DOMAIN]['entities'][entity.unique_id] = entity
+    async_add_entities(entities, update_before_add=True)
 
 
 async def async_setup_platform(
@@ -89,18 +91,21 @@ async def async_setup_platform(
 ) -> None:
     """Set up the sensor platform."""
     session = async_get_clientsession(hass)
-    sensors = []
+    entities = []
     if config[CONF_USERNAME] is not None and config[CONF_PASSWORD] is not None:
         api = WattrouterApi(session, config[CONF_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD])
         coordinator = WattrouterCoordinator(hass, api)
         await coordinator.async_config_entry_first_refresh()
-        sensors.append(WattrouterSwitch(coordinator, "TS11", "TS11"))
-        sensors.append(WattrouterSwitch(coordinator, "TS21", "TS21"))
-        sensors.append(WattrouterSwitch(coordinator, "TS31", "TS31"))
-        sensors.append(GroupedWattrouterSwitch(coordinator, ["TS11", "TS21", "TS31"], "TS-1-3"))
-        sensors.append(WattrouterSwitch(coordinator, "TS41", "TS41"))
-        sensors.append(WattrouterSwitch(coordinator, "TS51", "TS51"))
-        sensors.append(WattrouterSwitch(coordinator, "TS61", "TS61"))
-        sensors.append(GroupedWattrouterSwitch(coordinator, ["TS41", "TS51", "TS61"], "TS-4-6"))
-    async_add_entities(sensors, update_before_add=True)
+        entities.append(WattrouterSwitch(coordinator, "TS11", "TS11"))
+        entities.append(WattrouterSwitch(coordinator, "TS21", "TS21"))
+        entities.append(WattrouterSwitch(coordinator, "TS31", "TS31"))
+        entities.append(GroupedWattrouterSwitch(coordinator, ["TS11", "TS21", "TS31"], "TS-1-3"))
+        entities.append(WattrouterSwitch(coordinator, "TS41", "TS41"))
+        entities.append(WattrouterSwitch(coordinator, "TS51", "TS51"))
+        entities.append(WattrouterSwitch(coordinator, "TS61", "TS61"))
+        entities.append(GroupedWattrouterSwitch(coordinator, ["TS41", "TS51", "TS61"], "TS-4-6"))
+
+    for entity in entities:
+        hass.data[DOMAIN]['entities'][entity.unique_id] = entity
+    async_add_entities(entities, update_before_add=True)
 

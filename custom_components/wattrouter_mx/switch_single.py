@@ -41,6 +41,11 @@ class WattrouterSwitch(CoordinatorEntity, SwitchEntity, BaseWattrouterSwitch):
         self._name = name
         self._state = None
         self._available = False
+        self._unique_id = "wattrouter-" + eeid
+
+    @property
+    def unique_id(self):
+        return self._unique_id
 
     @property
     def is_on(self):
