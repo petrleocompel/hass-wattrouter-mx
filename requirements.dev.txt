@@ -1,0 +1,10 @@
+pytest
+pytest-cov==2.9.0
+pytest-homeassistant-custom-component
+
+homeassistant~=2021.12.10
+xmltodict~=0.13.0
+dicttoxml~=1.7.4
+
+voluptuous~=0.12.2
+aiohttp~=3.8.1
