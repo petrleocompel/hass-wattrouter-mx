@@ -23,10 +23,7 @@ from .const import (
 )
 
 
-logging.getLogger('dicttoxml').setLevel(logging.CRITICAL)
-
 _LOGGER = logging.getLogger(__name__)
-_LOGGER.setLevel(logging.DEBUG)
 
 
 class BaseWattrouterSwitch(CoordinatorEntity):
@@ -50,7 +47,7 @@ class BaseWattrouterSwitch(CoordinatorEntity):
 
     async def async_turn_on(self):
         """Turn the entity on."""
-        _LOGGER.info(
+        _LOGGER.debug(
             "Sending ON request to SWITCH device %s (%s)", self._eeid, self._name
         )
         try:
@@ -83,7 +80,7 @@ class BaseWattrouterSwitch(CoordinatorEntity):
         """Handle updated data from the coordinator."""
         mvalue = self.coordinator.data["conf"][self._eeid]["M"]
         current = mvalue[-1]
-        _LOGGER.info("Current status: %s, m value: %s, resOff: %s, resOn: %s", current, mvalue,
+        _LOGGER.debug("Current status: %s, m value: %s, resOff: %s, resOn: %s", current, mvalue,
                      current == WR_DISABLE_BIT, current == WR_ENABLE_BIT)
         if current == WR_ENABLE_BIT:
             self._state = STATE_ON
@@ -99,7 +96,7 @@ class BaseWattrouterSwitch(CoordinatorEntity):
 
     async def async_turn_off(self):
         """Turn Off method."""
-        _LOGGER.info(
+        _LOGGER.debug(
             "Sending OFF request to SWITCH device %s (%s)", self._eeid, self._name
         )
         try:

@@ -41,7 +41,6 @@ from .const import (
 logging.getLogger('dicttoxml').setLevel(logging.CRITICAL)
 
 _LOGGER = logging.getLogger(__name__)
-_LOGGER.setLevel(logging.DEBUG)
 
 SCAN_INTERVAL = timedelta(minutes=10)
 

@@ -4,8 +4,6 @@ import async_timeout
 import aiohttp
 
 _LOGGER = logging.getLogger(__name__)
-_LOGGER.setLevel(logging.DEBUG)
-
 
 class WattrouterApi:
     def __init__(self, session: aiohttp.ClientSession, url: str, username: str, password: str):

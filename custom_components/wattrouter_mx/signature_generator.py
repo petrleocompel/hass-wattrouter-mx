@@ -36,10 +36,10 @@ def po(src: str, length: int):
     if dR > length:
         dR = length
     pq = []
-    _LOGGER.info("shit src %s, length %s, dR %s, ", src, length, dR)
+    _LOGGER.debug("shit src %s, length %s, dR %s, ", src, length, dR)
     while ef < length and ef < dR:
         pq.append(ord(src[ef]) - 0x80)
-        _LOGGER.info("shit ef %s, dR %s", ef, dR)
+        _LOGGER.debug("shit ef %s, dR %s", ef, dR)
         if ef < (dR - 1):
             pq[ef] += ord(src[ef+1])
         else:

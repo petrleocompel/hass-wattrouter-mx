@@ -25,11 +25,7 @@ from .const import (
     WR_DISABLE_BIT,
 )
 
-
-logging.getLogger('dicttoxml').setLevel(logging.CRITICAL)
-
 _LOGGER = logging.getLogger(__name__)
-_LOGGER.setLevel(logging.DEBUG)
 
 
 class WattrouterSwitch(CoordinatorEntity, SwitchEntity, BaseWattrouterSwitch):
@@ -60,12 +56,12 @@ class WattrouterSwitch(CoordinatorEntity, SwitchEntity, BaseWattrouterSwitch):
     @property
     def available(self):
         """Return availability."""
-        _LOGGER.info("Device %s - availability: %s", self._name, self._available)
+        _LOGGER.debug("Device %s - availability: %s", self._name, self._available)
         return self._available
 
     async def async_turn_on(self):
         """Turn the entity on."""
-        _LOGGER.info(
+        _LOGGER.debug(
             "Sending ON request to SWITCH device %s (%s)", self._eeid, self._name
         )
         try:
@@ -89,7 +85,7 @@ class WattrouterSwitch(CoordinatorEntity, SwitchEntity, BaseWattrouterSwitch):
         """Handle updated data from the coordinator."""
         mvalue = self.coordinator.data["conf"][self._eeid]["M"]
         current = mvalue[-1]
-        _LOGGER.info("Current status: %s, m value: %s, resOff: %s, resOn: %s", current, mvalue,
+        _LOGGER.debug("Current status: %s, m value: %s, resOff: %s, resOn: %s", current, mvalue,
                      current == WR_DISABLE_BIT, current == WR_ENABLE_BIT)
         if current == WR_ENABLE_BIT:
             self._state = STATE_ON
@@ -104,7 +100,7 @@ class WattrouterSwitch(CoordinatorEntity, SwitchEntity, BaseWattrouterSwitch):
 
     async def async_turn_off(self):
         """Turn Off method."""
-        _LOGGER.info(
+        _LOGGER.debug(
             "Sending OFF request to SWITCH device %s (%s)", self._eeid, self._name
         )
         try:

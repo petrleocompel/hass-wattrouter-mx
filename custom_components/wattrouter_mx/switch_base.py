@@ -1,3 +1,4 @@
+from .coordinator import WattrouterCoordinator
 """Wattrouter Switches"""
 # TODO Workaround for https://github.com/quandyfactory/dicttoxml/issues/91
 # Remove when dicttoxml 1.7.5 is released
@@ -16,14 +17,9 @@ try:
 except ImportError:
     from homeassistant.components.switch import SwitchDevice as SwitchEntity
 
-from .coordinator import WattrouterCoordinator
 
-
-
-logging.getLogger('dicttoxml').setLevel(logging.CRITICAL)
 
 _LOGGER = logging.getLogger(__name__)
-_LOGGER.setLevel(logging.DEBUG)
 
 
 class BaseWattrouterSwitch():
